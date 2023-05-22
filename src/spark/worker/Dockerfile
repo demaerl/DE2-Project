@@ -12,7 +12,7 @@ RUN mv spark-3.3.2-bin-hadoop3/ /usr/local/spark
 ENV PATH="${PATH}:$SPARK_HOME/bin"
 ENV SPARK_HOME="/usr/local/spark"
 ENV SPARK_NO_DAEMONIZE="true"
-ENV SPARK_MASTER="spark://192.168.0.110:7077"
+ENV SPARK_MASTER="spark://192.168.X.XXX:7077"
 EXPOSE 8080
 #ENV SPARK_PYTHON="python3"
 CMD $SPARK_HOME/sbin/start-worker.sh $SPARK_MASTER 

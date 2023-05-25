@@ -1,9 +1,20 @@
 import requests
 import os
 import sys
+import pulsar
 
 TOKEN = os.environ['API_TOKEN']
 HEADERS = {'Authorization': f'Bearer {TOKEN}'}
+BROKER_IP = '192.168.2.138'
+
+def init_producer():
+    # Create a pulsar client by supplying ip address and port
+    client = pulsar.Client(f'pulsar://{BROKER_IP}:6650')
+
+    # Create a producer on the topic that consumer can subscribe to
+    producer = client.create_producer('repo-URLs')
+
+    return producer
 
 def check_junit(download_url)  -> bool:
     response = requests.get(download_url)
@@ -13,7 +24,7 @@ def check_junit(download_url)  -> bool:
     return False
 
 
-def check_pom_xml(repository_url):
+def check_maven_junit(repository_url):
     # Extract owner and repository name from the URL
     parts = repository_url.split('/')
     owner = parts[-2]
@@ -28,12 +39,12 @@ def check_pom_xml(repository_url):
         contents = response.json()
         for item in contents:
             if item['name'] == 'pom.xml' and item['type'] == 'file':
-                return item['download_url']
-    return None
+                return check_junit(item['download_url'])
+    return False
  
 
 def main():
-    repo_urls = []
+    producer = init_producer()
 
     for i in range(0,10):
         print(f'Round {i} of 10')
@@ -47,12 +58,12 @@ def main():
         for j in range(0,len(repos_dicts)):
             repo_dict = repos_dicts[j]
             # Call the function to check if pom.xml exists in the repository
-            download_url = check_pom_xml(repo_dict['html_url'])
-            if download_url:
-                if check_junit(download_url):
-                    repo_urls.append(repo_dict['clone_url'])
+            clone_url = repo_dict['clone_url']
+            if check_maven_junit(repo_dict['html_url']):
+                print(f'Sending download url: {clone_url}')
+                producer.send(clone_url.encode('utf-8'))
     
-    print(f'Number of repos that use Maven and JUnit: {len(repo_urls)}')
+    producer.close()
     sys.exit(0)
 
 if __name__ == "__main__":

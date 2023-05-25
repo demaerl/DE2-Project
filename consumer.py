@@ -17,7 +17,8 @@ def on_receive(consumer, msg):
     try:
         repo_url = msg.data().decode('utf-8')
         consumer.acknowledge(msg)
-        run_tests(repo_url)
+        print(f'Received repo URL: {repo_url}')
+        # run_tests(repo_url)
     except:
         consumer.negative_acknowledge(msg)
 
@@ -32,8 +33,10 @@ def init_consumer():
         message_listener=on_receive
     )
 
+    return consumer
+
 def main():
-    pass
+    consumer = init_consumer()
 
 if __name__ == "__main__":
     main()

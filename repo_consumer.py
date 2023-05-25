@@ -15,7 +15,9 @@ def run_tests(url: str):
     os.chdir(repo_name)
     try:
         print(f'Running tests of repo {repo_name}')
-        subprocess.run(['/usr/bin/mvn', 'test'])
+        subprocess.run(['/usr/bin/mvn', 'test'],
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.STDOUT)
         os.chdir('..')
         subprocess.run(['rm', '-rf', repo_name])
     except Exception as e:

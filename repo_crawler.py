@@ -24,7 +24,7 @@ def check_junit(download_url)  -> bool:
     return False
 
 
-def check_pom_xml(repository_url):
+def check_maven_junit(repository_url):
     # Extract owner and repository name from the URL
     parts = repository_url.split('/')
     owner = parts[-2]
@@ -39,8 +39,8 @@ def check_pom_xml(repository_url):
         contents = response.json()
         for item in contents:
             if item['name'] == 'pom.xml' and item['type'] == 'file':
-                return item['download_url']
-    return None
+                return check_junit(item['download_url'])
+    return False
  
 
 def main():
@@ -58,9 +58,10 @@ def main():
         for j in range(0,len(repos_dicts)):
             repo_dict = repos_dicts[j]
             # Call the function to check if pom.xml exists in the repository
-            download_url = check_pom_xml(repo_dict['html_url'])
-            if download_url and check_junit(download_url):
-                producer.send(download_url.encode('utf-8'))
+            clone_url = repo_dict['clone_url']
+            if check_maven_junit(repo_dict['html_url']):
+                print(f'Sending download url: {clone_url}')
+                producer.send(clone_url.encode('utf-8'))
     
     producer.close()
     sys.exit(0)

@@ -18,5 +18,5 @@ RUN pip install -r requirements.txt
 EXPOSE 6650 8080
 
 # Define the entry point command
-CMD [ "python3", "consumer1.py"]
+CMD [ "python3", "consumer.py"]
 

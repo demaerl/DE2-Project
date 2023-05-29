@@ -16,7 +16,7 @@ services:
     command: python3 /app/producer.py
     environment:
       - BROKER_IP=pulsar://pulsar-broker:6650
-      - API_TOKEN=
+      - API_TOKEN=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
     deploy:
       replicas: 1
       restart_policy:

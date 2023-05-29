@@ -17,5 +17,5 @@ while True:
         print(f"Error processing message: {str(e)}")
         consumer.negative_acknowledge(message)
 
-    consumer.close()
-    client.close()
+consumer.close()
+client.close()

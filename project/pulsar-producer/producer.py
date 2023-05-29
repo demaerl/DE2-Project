@@ -5,14 +5,14 @@ import pulsar
 
 TOKEN = os.environ['API_TOKEN']
 HEADERS = {'Authorization': f'Bearer {TOKEN}'}
-BROKER_IP = '192.168.2.138'
+BROKER_IP = os.environ['BROKER_IP']
 MAVEN_COUNT = 0
 MAVEN_JUNIT_COUNT = 0
 
 def init_producer():
     # Create a pulsar client by supplying ip address and port
-  # client = pulsar.Client(f'pulsar://{BROKER_IP}:6650')
-    client = pulsar.Client('pulsar://pulsar-broker:6650')  
+    client = pulsar.Client(f'pulsar://{BROKER_IP}:6650')
+    #client = pulsar.Client(f'pulsar://pulsar-broker:6650')  
     # Create a producer on the topic that consumer can subscribe to
     producer = client.create_producer('repo-URLs')
 

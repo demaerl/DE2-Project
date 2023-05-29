@@ -3,7 +3,7 @@ import os
 import subprocess
 from pulsar import ConsumerType
 
-BROKER_IP = '192.168.2.138'
+BROKER_IP = os.environ['BROKER_IP']
 
 def run_tests(url: str):
     repo_name = url.split('/')[-1][:-4]
@@ -25,7 +25,7 @@ def run_tests(url: str):
 
 
 def main():
-    client = pulsar.Client('pulsar://pulsar-broker:6650')
+    client = pulsar.Client('pulsar://{BROKER_IP}:6650')
 
     consumer = client.subscribe(
         'repo-URLs',

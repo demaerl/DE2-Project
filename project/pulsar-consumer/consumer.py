@@ -20,6 +20,8 @@ def run_tests(url: str):
                 stderr=subprocess.STDOUT)
         os.chdir('..')
         subprocess.run(['rm', '-rf', repo_name])
+        with open('log.txt', 'a') as logfile:
+            logfile.write(f'{repo_name}\n')
     except Exception as e:
         print(f'Error running tests of repo {repo_name}: {e}')
 

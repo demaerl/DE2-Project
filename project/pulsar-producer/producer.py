@@ -6,6 +6,8 @@ import pulsar
 TOKEN = os.environ['API_TOKEN']
 HEADERS = {'Authorization': f'Bearer {TOKEN}'}
 BROKER_IP = '192.168.2.138'
+MAVEN_COUNT = 0
+MAVEN_JUNIT_COUNT = 0
 
 def init_producer():
     # Create a pulsar client by supplying ip address and port
@@ -20,11 +22,13 @@ def check_junit(download_url)  -> bool:
     response = requests.get(download_url)
     if response.status_code == 200:
         if 'junit' in (response.content).decode('utf-8'):
+            global MAVEN_JUNIT_COUNT
+            MAVEN_JUNIT_COUNT += 1
             return True
     return False
 
 
-def check_maven_junit(repository_url):
+def check_maven_junit(repository_url: str):
     # Extract owner and repository name from the URL
     parts = repository_url.split('/')
     owner = parts[-2]
@@ -39,6 +43,8 @@ def check_maven_junit(repository_url):
         contents = response.json()
         for item in contents:
             if item['name'] == 'pom.xml' and item['type'] == 'file':
+                global MAVEN_COUNT
+                MAVEN_COUNT += 1
                 return check_junit(item['download_url'])
     return False
  
@@ -62,7 +68,8 @@ def main():
             if check_maven_junit(repo_dict['html_url']):
                 print(f'Sending download url: {clone_url}')
                 producer.send(clone_url.encode('utf-8'))
-    
+    print(f'{MAVEN_COUNT}\t repositories out of 1000 use Maven.')
+    print(f'{MAVEN_JUNIT_COUNT}\t repositories out of 1000 use Maven in combination with JUnit.')
     producer.close()
     sys.exit(0)
 

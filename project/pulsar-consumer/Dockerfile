@@ -20,3 +20,4 @@ EXPOSE 6650 8080
 # Define the entry point command
 CMD [ "python3", "consumer.py"]
 
+

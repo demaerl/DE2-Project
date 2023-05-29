@@ -21,6 +21,5 @@ RUN pip install -r requirements.txt
 # Expose necessary ports
 EXPOSE 6650 8080
 
-
 # Define the entry point command
 CMD [ "python3", "producer.py"]

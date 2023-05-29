@@ -25,7 +25,7 @@ def run_tests(url: str):
 
 
 def main():
-    client = pulsar.Client('pulsar://{BROKER_IP}:6650')
+    client = pulsar.Client(f'pulsar://{BROKER_IP}:6650')
 
     consumer = client.subscribe(
         'repo-URLs',

@@ -15,8 +15,8 @@ services:
     image: pulsar-producer
     command: python3 /app/producer.py
     environment:
-      - BROKER_IP=pulsar://pulsar-broker:6650
-      - API_TOKEN=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
+      - BROKER_IP=pulsar-broker
+      - API_TOKEN=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
     deploy:
       replicas: 1
       restart_policy:
@@ -26,8 +26,8 @@ services:
     image: pulsar-consumer
     command: python3 /app/consumer.py
     environment:
-      - BROKER_IP=pulsar://pulsar-broker:6650
+      - BROKER_IP=pulsar-broker
     deploy:
-      replicas: 1
+      replicas: 3
       restart_policy:
         condition: on-failure

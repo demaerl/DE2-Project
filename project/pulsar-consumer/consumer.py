@@ -20,8 +20,6 @@ def run_tests(url: str):
                 stderr=subprocess.STDOUT)
         os.chdir('..')
         subprocess.run(['rm', '-rf', repo_name])
-        with open('log.txt', 'a') as logfile:
-            logfile.write(f'{repo_name}\n')
     except Exception as e:
         print(f'Error running tests of repo {repo_name}: {e}')
 
@@ -44,6 +42,9 @@ def main():
             consumer.negative_acknowledge(msg)
         print(f'Received repo URL: {repo_url}')
         run_tests(repo_url)
+        repo_name = repo_url.split('/')[-1][:-4]
+        with open('log.txt', 'a') as logfile:
+            logfile.write(f'{repo_name}\n')
 
 if __name__ == "__main__":
     main()

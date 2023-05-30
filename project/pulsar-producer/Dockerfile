@@ -1,9 +1,9 @@
 # Use a base image with Maven and JDK
 FROM maven:3.8.4-jdk-11
 
-ARG TOKEN
+# ARG TOKEN
 
-ENV API_TOKEN=$TOKEN
+# ENV API_TOKEN=$TOKEN
 
 # Set the working directory
 WORKDIR /app

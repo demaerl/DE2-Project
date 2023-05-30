@@ -19,10 +19,10 @@ def run_tests(url: str):
                 stdout=subprocess.DEVNULL,
                 stderr=subprocess.STDOUT)
         os.chdir('..')
+        print(f'Tests of repo {repo_name} finished')
         subprocess.run(['rm', '-rf', repo_name])
     except Exception as e:
         print(f'Error running tests of repo {repo_name}: {e}')
-
 
 def main():
     client = pulsar.Client(f'pulsar://{BROKER_IP}:6650')
